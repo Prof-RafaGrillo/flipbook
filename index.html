@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria de GIFs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .gif-display {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .current-gif {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .gif-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        input[type="range"] {
+            width: 150px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Galeria de GIFs Incríveis</h1>
+            <p>Uma coleção de GIFs animados para todos os gostos</p>
+        </header>
+        
+        <div class="controls">
+            <button id="prevBtn">⏮ Anterior</button>
+            <button id="playPauseBtn">⏸ Pausar</button>
+            <button id="nextBtn">Próximo ⏭</button>
+            <button id="shuffleBtn">🔀 Embaralhar</button>
+            <button id="fullscreenBtn">⛶ Tela Cheia</button>
+        </div>
+        
+        <div class="speed-control">
+            <span>Velocidade:</span>
+            <input type="range" id="speedControl" min="1" max="10" value="5">
+            <span id="speedValue">5s</span>
+        </div>
+        
+        <div class="gif-display">
+            <img id="currentGif" class="current-gif" src="" alt="GIF atual">
+            <div class="gif-info">
+                <span id="gifTitle">Carregando...</span>
+                <span id="gifCounter">1 / 20</span>
+            </div>
+        </div>
+        
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <script>
+        // Lista de GIFs (podem ser substituídos por URLs reais)
+        const gifs = [
+            { src: "https://media.giphy.com/media/3o7aCTPPm4OHfRLSH6/giphy.gif", title: "Cachorro dançando" },
+            { src: "https://media.giphy.com/media/l0HlN8P27reDc5yOA/giphy.gif", title: "Gato digitando" },
+            { src: "https://media.giphy.com/media/xT5LMHxhOfscxPfIfm/giphy.gif", title: "Panda rolando" },
+            { src: "https://media.giphy.com/media/3o72FfM5HJydzafgUE/giphy.gif", title: "Foguete decolando" },
+            { src: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif", title: "Céu estrelado" },
+            { src: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif", title: "Abacaxi dançante" },
+            { src: "https://media.giphy.com/media/xT5LMGupUKH3o1ZTWM/giphy.gif", title: "Coração pulsante" },
+            { src: "https://media.giphy.com/media/3o7TKSha51ATTx9KzC/giphy.gif", title: "Planetas girando" },
+            { src: "https://media.giphy.com/media/l0HU7JI1m1eEwz7Ow/giphy.gif", title: "Pizza giratória" },
+            { src: "https://media.giphy.com/media/3o7TKz2eMXx7dn95FS/giphy.gif", title: "Cérebro pensante" },
+            { src: "https://media.giphy.com/media/l0HU7uFpww1W8o1Xy/giphy.gif", title: "Foguete espacial" },
+            { src: "https://media.giphy.com/media/3o7TKMt1ZZh1n51Qz6/giphy.gif", title: "Bola de basquete" },
+            { src: "https://media.giphy.com/media/l0HU7x04pTiHzuS2A/giphy.gif", title: "Computador futurista" },
+            { src: "https://media.giphy.com/media/3o7TKUumRPVM4kZq2s/giphy.gif", title: "Globo terrestre" },
+            { src: "https://media.giphy.com/media/l0HU20BZ6LbSEITza/giphy.gif", title: "Música animada" },
+            { src: "https://media.giphy.com/media/3o7TKSjRrfIPjeiHiM/giphy.gif", title: "Flores desabrochando" },
+            { src: "https://media.giphy.com/media/l0HU9HHVux5qJEAKY/giphy.gif", title: "Céu noturno" },
+            { src: "https://media.giphy.com/media/3o7TKG1gpaqbhTxQhy/giphy.gif", title: "Bola de futebol" },
+            { src: "https://media.giphy.com/media/l0HU7JI1m1eEwz7Ow/giphy.gif", title: "Hambúrguer saboroso" },
+            { src: "https://media.giphy.com/media/3o7TKUXTZ22Rq8f7w4/giphy.gif", title: "Café fumegante" }
+        ];
+
+        // Elementos DOM
+        const currentGif = document.getElementById('currentGif');
+        const gifTitle = document.getElementById('gifTitle');
+        const gifCounter = document.getElementById('gifCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const speedControl = document.getElementById('speedControl');
+        const speedValue = document.getElementById('speedValue');
+        const gallery = document.getElementById('gallery');
+
+        // Variáveis de estado
+        let currentIndex = 0;
+        let isPlaying = true;
+        let interval;
+        let speed = 5000; // 5 segundos
+
+        // Inicialização
+        function init() {
+            updateGif();
+            createGallery();
+            startSlideshow();
+            
+            // Event listeners
+            prevBtn.addEventListener('click', showPreviousGif);
+            nextBtn.addEventListener('click', showNextGif);
+            playPauseBtn.addEventListener('click', togglePlayPause);
+            shuffleBtn.addEventListener('click', shuffleGifs);
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+            speedControl.addEventListener('input', updateSpeed);
+            
+            // Atualizar velocidade inicial
+            updateSpeed();
+        }
+
+        // Atualizar o GIF atual
+        function updateGif() {
+            currentGif.src = gifs[currentIndex].src;
+            gifTitle.textContent = gifs[currentIndex].title;
+            gifCounter.textContent = `${currentIndex + 1} / ${gifs.length}`;
+            
+            // Destacar o GIF atual na galeria
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach((item, index) => {
+                if (index === currentIndex) {
+                    item.style.border = '3px solid #ffffff';
+                } else {
+                    item.style.border = 'none';
+                }
+            });
+        }
+
+        // Criar galeria de miniaturas
+        function createGallery() {
+            gallery.innerHTML = '';
+            gifs.forEach((gif, index) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `<img src="${gif.src}" alt="${gif.title}">`;
+                item.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateGif();
+                    resetSlideshow();
+                });
+                gallery.appendChild(item);
+            });
+        }
+
+        // Mostrar GIF anterior
+        function showPreviousGif() {
+            currentIndex = (currentIndex - 1 + gifs.length) % gifs.length;
+            updateGif();
+            resetSlideshow();
+        }
+
+        // Mostrar próximo GIF
+        function showNextGif() {
+            currentIndex = (currentIndex + 1) % gifs.length;
+            updateGif();
+            resetSlideshow();
+        }
+
+        // Alternar entre reproduzir e pausar
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                startSlideshow();
+                playPauseBtn.innerHTML = '⏸ Pausar';
+            } else {
+                clearInterval(interval);
+                playPauseBtn.innerHTML = '▶ Reproduzir';
+            }
+        }
+
+        // Embaralhar a ordem dos GIFs
+        function shuffleGifs() {
+            for (let i = gifs.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [gifs[i], gifs[j]] = [gifs[j], gifs[i]];
+            }
+            currentIndex = 0;
+            updateGif();
+            createGallery();
+            resetSlideshow();
+        }
+
+        // Alternar modo de tela cheia
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Erro ao tentar entrar em modo tela cheia: ${err.message}`);
+                });
+                fullscreenBtn.innerHTML = '⛶ Sair da Tela Cheia';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    fullscreenBtn.innerHTML = '⛶ Tela Cheia';
+                }
+            }
+        }
+
+        // Atualizar velocidade da apresentação
+        function updateSpeed() {
+            speed = 11000 - (speedControl.value * 1000); // Invertendo para que valor maior = mais rápido
+            speedValue.textContent = `${speedControl.value}s`;
+            if (isPlaying) {
+                resetSlideshow();
+            }
+        }
+
+        // Iniciar a apresentação de slides
+        function startSlideshow() {
+            interval = setInterval(showNextGif, speed);
+        }
+
+        // Reiniciar a apresentação de slides
+        function resetSlideshow() {
+            if (isPlaying) {
+                clearInterval(interval);
+                startSlideshow();
+            }
+        }
+
+        // Inicializar o site quando a página carregar
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
