@@ -166,30 +166,42 @@
         
         <div class="gallery" id="gallery"></div>
     </div>
-
+    
     <script>
         // Lista de GIFs (podem ser substituídos por URLs reais)
         const gifs = [
-            { src: "https://media.giphy.com/media/3o7aCTPPm4OHfRLSH6/giphy.gif", title: "Cachorro dançando" },
-            { src: "https://media.giphy.com/media/l0HlN8P27reDc5yOA/giphy.gif", title: "Gato digitando" },
-            { src: "https://media.giphy.com/media/xT5LMHxhOfscxPfIfm/giphy.gif", title: "Panda rolando" },
-            { src: "https://media.giphy.com/media/3o72FfM5HJydzafgUE/giphy.gif", title: "Foguete decolando" },
-            { src: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif", title: "Céu estrelado" },
-            { src: "https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif", title: "Abacaxi dançante" },
-            { src: "https://media.giphy.com/media/xT5LMGupUKH3o1ZTWM/giphy.gif", title: "Coração pulsante" },
-            { src: "https://media.giphy.com/media/3o7TKSha51ATTx9KzC/giphy.gif", title: "Planetas girando" },
-            { src: "https://media.giphy.com/media/l0HU7JI1m1eEwz7Ow/giphy.gif", title: "Pizza giratória" },
-            { src: "https://media.giphy.com/media/3o7TKz2eMXx7dn95FS/giphy.gif", title: "Cérebro pensante" },
-            { src: "https://media.giphy.com/media/l0HU7uFpww1W8o1Xy/giphy.gif", title: "Foguete espacial" },
-            { src: "https://media.giphy.com/media/3o7TKMt1ZZh1n51Qz6/giphy.gif", title: "Bola de basquete" },
-            { src: "https://media.giphy.com/media/l0HU7x04pTiHzuS2A/giphy.gif", title: "Computador futurista" },
-            { src: "https://media.giphy.com/media/3o7TKUumRPVM4kZq2s/giphy.gif", title: "Globo terrestre" },
-            { src: "https://media.giphy.com/media/l0HU20BZ6LbSEITza/giphy.gif", title: "Música animada" },
-            { src: "https://media.giphy.com/media/3o7TKSjRrfIPjeiHiM/giphy.gif", title: "Flores desabrochando" },
-            { src: "https://media.giphy.com/media/l0HU9HHVux5qJEAKY/giphy.gif", title: "Céu noturno" },
-            { src: "https://media.giphy.com/media/3o7TKG1gpaqbhTxQhy/giphy.gif", title: "Bola de futebol" },
-            { src: "https://media.giphy.com/media/l0HU7JI1m1eEwz7Ow/giphy.gif", title: "Hambúrguer saboroso" },
-            { src: "https://media.giphy.com/media/3o7TKUXTZ22Rq8f7w4/giphy.gif", title: "Café fumegante" }
+            { src: "./gifs/Alice lima.gif", title: "Alice Lima" },
+            { src: "./gifs/Alice Maria 8⁰D.gif", title: "Gato digitando" },
+            { src: "./gifs/angello 8C.gif", title: "Panda rolando" },
+            { src: "./gifs/Beatriz 8B.gif", title: "Foguete decolando" },
+            { src: "./gifs/Bianca de Farias 8b.gif", title: "Céu estrelado" },
+            { src: "./gifs/BRENDA 8° D.gif", title: "Abacaxi dançante" },
+            { src: "./gifs/butterfly anabelly.gif", title: "Coração pulsante" },
+            { src: "./gifs/Danielle 8 C.gif", title: "Planetas girando" },
+            { src: "./gifs/Emanuella Macan _ 8°D.gif", title: "Pizza giratória" },
+            { src: "./gifs/Fernanda-8C.gif", title: "Cérebro pensante" },
+            { src: "./gifs/Giovana .gif", title: "Foguete espacial" },
+            { src: "./gifs/João Guilherme 8c.gif", title: "Bola de basquete" },
+            { src: "./gifs/João Victor Jarschel 8°B.gif", title: "Computador futurista" },
+            { src: "./gifs/João Vitor Silveira-8°C (1).gif", title: "Globo terrestre" },
+            { src: "./gifs/kaue.gif", title: "Música animada" },
+            { src: "./gifs/Lara 8°B.gif", title: "Flores desabrochando" },
+            { src: "./gifs/Luiz Felipe Ribeiro 8°C.gif", title: "Céu noturno" },
+            { src: "./gifs/Luiz Fernando Chaves.gif", title: "Bola de futebol" },
+            { src: "./gifs/Maria Antonia 8°D.gif", title: "Hambúrguer saboroso" },
+            { src: "./gifs/Maria C 8 ano B.gif", title: "Café fumegante" },
+            { src: "./gifs/Maria Eduarda.gif", title: "Alice Lima" },
+            { src: "./gifs/mateus Eduardo 8c.gif", title: "Gato digitando" },
+            { src: "./gifs/murilo.gif", title: "Panda rolando" },
+            { src: "./gifs/My Stop Motion Movie(1).gif", title: "Foguete decolando" },
+            { src: "./gifs/nadilly 8B.gif", title: "Céu estrelado" },
+            { src: "./gifs/nicolas de Souza pereira 8° B.gif", title: "Abacaxi dançante" },
+            { src: "./gifs/Paulo Henrique Inamassu Busnello 8B.gif", title: "Coração pulsante" },
+            { src: "./gifs/Thayla 8 ano B.gif", title: "Planetas girando" },
+            { src: "./gifs/tomatinho.gif", title: "Pizza giratória" },
+            { src: "./gifs/victor.gif", title: "Cérebro pensante" },
+            { src: "./gifs/Vida diferente- João Victor.gif", title: "Foguete espacial" }
+           
         ];
 
         // Elementos DOM
